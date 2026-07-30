@@ -3,9 +3,11 @@ import { Home } from './pages/Home'
 import { ExamRoute } from './pages/ExamRoute'
 import { ResultPage } from './pages/ResultPage'
 
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
+
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <div className="app-shell">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -16,3 +18,4 @@ export default function App() {
     </BrowserRouter>
   )
 }
+

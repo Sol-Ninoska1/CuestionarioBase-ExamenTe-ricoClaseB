@@ -24,6 +24,6 @@ En local la app queda en:
 
 ## GitHub Pages
 
-Cada push a `main` dispara el deploy automático (Actions → Deploy to GitHub Pages).
+Cada push a `master` dispara el deploy automático (Actions → Deploy to GitHub Pages).
 
 En el repo: **Settings → Pages → Source: GitHub Actions**.

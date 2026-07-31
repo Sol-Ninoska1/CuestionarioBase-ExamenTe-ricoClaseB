@@ -13,6 +13,8 @@ export interface Question {
   correct: AnswerKey[]
   /** URL of an accompanying image (Vite-imported asset) */
   image?: string
+  /** Pregunta oficialmente eliminada del cuestionario (se mantiene la numeración) */
+  eliminated?: boolean
 }
 
 export interface ExamMeta {

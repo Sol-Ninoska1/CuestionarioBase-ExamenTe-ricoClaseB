@@ -552,32 +552,12 @@ export const exam4Questions: Question[] = [
   {
     id: 134,
     text: '¿Cuáles son las 2 formas más seguras para transportar una guagua en su automóvil?',
-    instruction: 'Marque dos respuestas',
+    instruction: 'Esta pregunta se elimina, manteniendo las siguientes preguntas con su numeración original.',
     type: 'multiple',
     selectCount: 2,
-    options: [
-      {
-        key: 'a',
-        text: 'En brazos de un adulto que va con cinturón de seguridad.',
-      },
-      {
-        key: 'b',
-        text: 'En brazos de un adulto de modo que el cinturón les sujete a ambos.',
-      },
-      {
-        key: 'c',
-        text: 'En una silla de seguridad mirando hacia adelante.',
-      },
-      {
-        key: 'd',
-        text: 'En el asiento delantero, en una silla de seguridad mirando hacia atrás, pero sólo si el vehículo no posee doble airbag.',
-      },
-      {
-        key: 'e',
-        text: 'En el asiento trasero, en silla de seguridad mirando hacia atrás.',
-      },
-    ],
-    correct: ['d', 'e'],
+    eliminated: true,
+    options: [],
+    correct: [],
   },
   {
     id: 135,

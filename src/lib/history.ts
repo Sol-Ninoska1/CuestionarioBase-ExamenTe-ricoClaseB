@@ -97,7 +97,7 @@ export function scoreExam(
 ): { score: number; total: number; details: { id: number; ok: boolean }[] } {
   const details = questions.map((q) => ({
     id: q.id,
-    ok: setsEqual(readAnswers(answers, q.id), q.correct),
+    ok: q.eliminated ? true : setsEqual(readAnswers(answers, q.id), q.correct),
   }))
   const score = details.filter((d) => d.ok).length
   return { score, total: questions.length, details }

@@ -334,13 +334,34 @@ p {
 }
 
 .question-image img {
-  max-width: min(420px, 100%);
+  max-width: min(720px, 100%);
   max-height: min(520px, 70vh);
   width: auto;
   height: auto;
   object-fit: contain;
   border-radius: 12px;
   background: #fff;
+}
+
+.question-eliminated {
+  margin: 1.25rem 0 0.5rem;
+  padding: 1.35rem 1.25rem;
+  border-radius: 14px;
+  border: 1px dashed color-mix(in srgb, var(--accent) 55%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  text-align: center;
+}
+
+.question-eliminated p {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.question-card--eliminated h2 {
+  opacity: 0.92;
 }
 
 .options {

@@ -53,14 +53,16 @@ export function ExamPage() {
       const currentAnswers = answersRef.current
 
       if (!auto) {
-        const unanswered = questions.filter((q) => (currentAnswers[q.id] ?? []).length === 0)
+        const unanswered = questions.filter(
+          (q) => !q.eliminated && (currentAnswers[q.id] ?? []).length === 0,
+        )
         if (unanswered.length > 0) {
           const go = window.confirm(
             `Hay ${unanswered.length} pregunta(s) sin responder. ¿Finalizar de todos modos?`,
           )
           if (!go) {
             const firstMissing = questions.findIndex(
-              (q) => (currentAnswers[q.id] ?? []).length === 0,
+              (q) => !q.eliminated && (currentAnswers[q.id] ?? []).length === 0,
             )
             if (firstMissing >= 0) setCurrent(firstMissing)
             return
@@ -124,14 +126,18 @@ export function ExamPage() {
 
   const question = questions[current]
   const selected = answers[question.id] ?? []
-  const answeredCount = questions.filter((q) => (answers[q.id] ?? []).length > 0).length
+  const answeredCount = questions.filter(
+    (q) => q.eliminated || (answers[q.id] ?? []).length > 0,
+  ).length
   const timerUrgent = secondsLeft <= 5 * 60
   const atLimit =
+    !question.eliminated &&
     question.type === 'multiple' &&
     question.selectCount != null &&
     selected.length >= question.selectCount
 
   function toggleOption(key: AnswerKey) {
+    if (question.eliminated) return
     setAnswers((prev) => {
       const nextSel = nextSelection(question, prev[question.id] ?? [], key)
       const next = { ...prev, [question.id]: nextSel }
@@ -167,43 +173,58 @@ export function ExamPage() {
         </div>
       </header>
 
-      <article className="question-card">
+      <article className={`question-card ${question.eliminated ? 'question-card--eliminated' : ''}`}>
         <p className="question-card__num">Pregunta {question.id}</p>
         <h2>{question.text}</h2>
-        <p className="question-card__hint">{question.instruction}</p>
-        {question.type === 'multiple' && (
-          <p className="question-card__count">
-            {question.selectCount != null
-              ? `Seleccionadas: ${selected.length} de ${question.selectCount}`
-              : `Seleccionadas: ${selected.length}`}
-            {atLimit ? ' · Desmarca una si quieres cambiar' : ''}
-          </p>
-        )}
 
-        {question.image && (
-          <div className="question-image">
-            <img src={question.image} alt="" />
+        {question.eliminated ? (
+          <div className="question-eliminated" role="status">
+            <p>
+              Esta pregunta se elimina,
+              <br />
+              manteniendo las siguientes
+              <br />
+              preguntas con su numeración original.
+            </p>
           </div>
-        )}
+        ) : (
+          <>
+            <p className="question-card__hint">{question.instruction}</p>
+            {question.type === 'multiple' && (
+              <p className="question-card__count">
+                {question.selectCount != null
+                  ? `Seleccionadas: ${selected.length} de ${question.selectCount}`
+                  : `Seleccionadas: ${selected.length}`}
+                {atLimit ? ' · Desmarca una si quieres cambiar' : ''}
+              </p>
+            )}
 
-        <ul className="options">
-          {question.options.map((opt) => {
-            const isOn = selected.includes(opt.key)
-            return (
-              <li key={opt.key}>
-                <button
-                  type="button"
-                  className={`option ${isOn ? 'option--selected' : ''}`}
-                  onClick={() => toggleOption(opt.key)}
-                  aria-pressed={isOn}
-                >
-                  <span className="option__key">{opt.key.toUpperCase()}</span>
-                  <span>{opt.text}</span>
-                </button>
-              </li>
-            )
-          })}
-        </ul>
+            {question.image && (
+              <div className="question-image">
+                <img src={question.image} alt="" />
+              </div>
+            )}
+
+            <ul className="options">
+              {question.options.map((opt) => {
+                const isOn = selected.includes(opt.key)
+                return (
+                  <li key={opt.key}>
+                    <button
+                      type="button"
+                      className={`option ${isOn ? 'option--selected' : ''}`}
+                      onClick={() => toggleOption(opt.key)}
+                      aria-pressed={isOn}
+                    >
+                      <span className="option__key">{opt.key.toUpperCase()}</span>
+                      <span>{opt.text}</span>
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          </>
+        )}
       </article>
 
       <nav className="exam__nav">
@@ -233,7 +254,7 @@ export function ExamPage() {
 
       <div className="question-dots" role="navigation" aria-label="Ir a pregunta">
         {questions.map((q, i) => {
-          const done = (answers[q.id] ?? []).length > 0
+          const done = q.eliminated || (answers[q.id] ?? []).length > 0
           return (
             <button
               key={q.id}

@@ -83,17 +83,26 @@ export function ResultPage() {
             const right = formatAnswers(q, q.correct)
             const ok = okById.get(q.id) ?? false
             return (
-              <li key={q.id} className={ok ? 'ok' : 'bad'}>
+              <li key={q.id} className={q.eliminated ? 'ok eliminated' : ok ? 'ok' : 'bad'}>
                 <span className="rev-num">{q.id}</span>
                 <span className="rev-text">{q.text}</span>
                 <div className="rev-ans">
-                  <p>
-                    <span className="rev-label">Tu respuesta:</span> {user}
-                  </p>
-                  {!ok && (
-                    <p className="rev-correct">
-                      <span className="rev-label">Correcta:</span> {right}
+                  {q.eliminated ? (
+                    <p>
+                      <span className="rev-label">Estado:</span> Pregunta eliminada del
+                      cuestionario oficial (se mantiene la numeración).
                     </p>
+                  ) : (
+                    <>
+                      <p>
+                        <span className="rev-label">Tu respuesta:</span> {user}
+                      </p>
+                      {!ok && (
+                        <p className="rev-correct">
+                          <span className="rev-label">Correcta:</span> {right}
+                        </p>
+                      )}
+                    </>
                   )}
                 </div>
               </li>
